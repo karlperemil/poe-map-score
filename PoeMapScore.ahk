@@ -1,0 +1,2 @@
+^+m::
+Send {ctrl}c
