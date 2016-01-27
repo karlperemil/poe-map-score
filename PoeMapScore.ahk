@@ -1,10 +1,10 @@
 ^+m::
 Send {ctrl}c
 mapText = %clipboard%
-quantity = RegexMatch(mapText, (Quantity.*:)\s([0-9]*) [, quant = ""])
+quantity = RegexMatch(mapText, (Quantity:)\s\+([0-9]*) [, quant = ""])
 quant = quant%1%
 
-packsize = RegexMatch(mapText, ((Pack\sSize.*:)\s([0-9]*) [, pack = ""])
+packsize = RegexMatch(mapText, ((Pack\sSize.*:)\s\+([0-9]*) [, pack = ""])
 pack = pack%2%
 
 magic = RegexMatch(mapText, (\d\d)%\smore\smagic [, mag = ""])
