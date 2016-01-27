@@ -38,8 +38,8 @@ IfWinActive, Path of Exile ahk_class Direct3DWindowClass
 
 	quant := quant/100 + 1
 	pack := ((pack/100) + 1)**2
-	mag := mag*.7/100 + 1
-	rar := rar*.2/100 + 1
+	mag := mag*0.46/100 + 1
+	rar := rar*0.01/100 + 1
 	base := 1.75
 
 	maps := (base * quant * pack * mag ) + (base * quant * (rar - 1))

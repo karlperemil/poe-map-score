@@ -1,0 +1,50 @@
+Underground River:
+magic: 6
+normal: 36
+rare: 9
+strongbox: 2
+
+Terrace:
+normal: 50
+magic: 9
+rare: 6
+strongbox: 0
+
+Tunnel:
+normal: 39
+magic: 8
+rare: 8
+strongbox: 1
+
+Crematorium:
+normal: 31
+magic: 7
+rare: 10
+strongbox: 1
+
+
+var normal = 36 + 50 + 39 + 31
+var magic = 6 + 9 + 8 + 7
+var rare = 10 + 8 + 6 + 9
+
+average amount of normal packs : 39 + strongboxes*3 = 42
+average magic packs: 7.5
+average rares: 8.26
+
+rares * rare mod = 2.5 rare mobs
+magic * magic mod = 2 magic packs
+
+items dropped from a map:
+42 * 0.104 * 13 = 57
+7.5 * 0.92 * 13 = 89
+8.26 * 2.18 = 18
+total = 57 + 89 + 18 = 164
+
+rare mod items = 2.5 * 2.18 = 5.45 = 3.323% more items or 0.1% per %
+blue mod items = 2 * 13 * 0.92 = 23.92 = 14% more items or 0.45% per %
+
+chance for a drop to be a map: 1.524%
+chance for a rare to drop a map: 3.362%
+chance for a blue to drop a map: 1.402%
+chance for a normal to drop a map: 0.158%
+
