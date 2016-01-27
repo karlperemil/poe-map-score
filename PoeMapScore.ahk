@@ -1,29 +1,59 @@
+MouseMoveThreshold := 40
+CoordMode, Mouse, Screen
+CoordMode, ToolTip, Screen
+
+
 ^+m::
-Send {ctrl}c
-mapText = %clipboard%
-quantity = RegexMatch(mapText, (Quantity:)\s\+([0-9]*) [, quant = ""])
-quant = quant%1%
-
-packsize = RegexMatch(mapText, ((Pack\sSize.*:)\s\+([0-9]*) [, pack = ""])
-pack = pack%2%
-
-magic = RegexMatch(mapText, (\d\d)%\smore\smagic [, mag = ""])
-mag = mag%1%
-
-rare = RegexMatch(mapText, (\d\d)%\smore\srare, [, rar = ""])
-rar = rar%1%
-
-quant = quant/100 + 1
-pack = pack*2/100 + 1
-mag = mag*.7/100 + 1
-rar = rar*.2/100 + 1
-
-z = 1
-base = 1.75
-
-maps = (base * quant * pack * mag * z) + (base * quant * (rar - 1))
+Send ^c
+Sleep 250
+ClipBoardData = %clipboard%
+StringReplace RawItemData, ClipBoardData, `r, , A
+RegExMatch(RawItemData, "(Quantity:)\s\+([0-9]*)", SubPat)
+quant := SubPat2
 
 
-mapReturns = 1
-MsgBox Map Score: %maps%
+RegexMatch(RawItemData, "(Pack\sSize.*:)\s\+([0-9]*)", Packsize)
+pack := Packsize2
+
+RegexMatch(RawItemData, "(\d\d).\smore\sMagic", Magic)
+mag := Magic1
+If(!mag){
+	mag = 1
+}
+
+RegexMatch(RawItemData, "(\d\d).\smore\sRare", Rare)
+rar := Rare1
+
+quant := quant/100 + 1
+pack := pack*2/100 + 1
+mag := mag*.7/100 + 1
+rar := rar*.2/100 + 1
+base := 1.75
+
+maps := (base * quant * pack * mag ) + (base * quant * (rar - 1))
+
+FunctionShowToolTipPriceInfo(maps)
+return
+
+FunctionShowToolTipPriceInfo(responsecontent)
+{
+    ; Get position of mouse cursor
+    Sleep, 2
+	Global X
+    Global Y
+    MouseGetPos, X, Y	
+	gui, font, s15, Verdana 
+    ToolTip, %responsecontent%, X - 135, Y + 30
+    SetTimer, SubWatchCursorPrice, 100     
+
+}
+
+SubWatchCursorPrice:
+  MouseGetPos, CurrX, CurrY
+  MouseMoved := (CurrX - X)**2 + (CurrY - Y)**2 > MouseMoveThreshold**2
+  If (MouseMoved)
+  {
+    SetTimer, SubWatchCursorPrice, Off
+    ToolTip
+  }
 return
