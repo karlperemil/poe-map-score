@@ -1,22 +1,135 @@
 ; Thanks to exiletools.com for the item lookup script
+; AMBUSH zana mod asummes you roll EVERY box with "Guarded by one pack of Magic monsters"
+; On average this will cost you 115 alteration orbs per map
+
+; HOTKEYS:
+; Ctrl + G = no zana or fragments
+; Ctrl + H = no zana, 1 fragment
+; Ctrl + J = no zana, 2 fragments
+; Ctrl + k = no zana, 3 fragments
+; Ctrl + Shift + G = Domination, 0 fragments
+; Ctrl + Shift + H = Domination, 1 fragments
+; Ctrl + Shift + J = Domination, 2 fragments
+; Ctrl + Shift + K = Domination, 3 fragments
+; Ctrl + Alt + G = Ambush, 0 fragments
+; Ctrl + Alt + H = Ambush, 1 fragments
+; Ctrl + Alt + J = Ambush, 2 fragments
+; Ctrl + Alt + K = Ambush, 3 fragments
 
 MouseMoveThreshold := 40
 CoordMode, Mouse, Screen
 CoordMode, ToolTip, Screen
 
 
-^+m::
+^g::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass
+{
+	FunctionCalcMapDrops(0,false,false)
+}
+return
+
+^h::
 IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
 {
+	FunctionCalcMapDrops(1,false,false)
+}
+return
+
+^j::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(2,false,false)
+}
+return
+
+^k::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(3,false,false)
+}
+return
+
+^+g::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(0,true,false)
+}
+return
+
+^+h::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(1,true,false)
+}
+return
+
+^+j::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(2,true,false)
+}
+return
+
+^+k::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(3,true,false)
+}
+return
+
+^!g::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(0,false,true)
+}
+return
+
+^!h::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(1,false,true)
+}
+return
+
+^!j::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(2,false,true)
+}
+return
+
+^!k::
+IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
+{
+	FunctionCalcMapDrops(3,false,true)
+}
+return
+
+
+FunctionCalcMapDrops(fragments, domi, ambush){
+	zana := 1
+	zanaMod := "None"
+	If(domi){
+		zana := 1.346153
+		zanaMod := "Domination"
+	}
+
+	If(ambush){
+		zana := 1.276923
+		zanaMod := "Ambush"
+	}
+
 	Send ^c
 	Sleep 250
 	ClipBoardData = %clipboard%
 	StringReplace RawItemData, ClipBoardData, `r, , A
+
 	RegExMatch(RawItemData, "(Quantity:)\s\+([0-9]*)", SubPat)
 	quant := SubPat2/100
 	If(!quant){
 		quant = 0
 	}
+	quant := quant + (fragments * 0.05)
 
 	RegexMatch(RawItemData, "(Pack\sSize.*:)\s\+([0-9]*)", Packsize)
 	pack := Packsize2/100
@@ -55,13 +168,23 @@ IfWinActive, Path of Exile ahk_class Direct3DWindowClass
 		tier = 1
 	}
 
-	mapDropChance = 0.0101148
+	;todo add zana mods
+	;todo add vaal fragments
+
+	mapDropChance = 0.009445
 	magicModIncrease = 0.1430/30
 	rareModIncrease = 0.04532/30
+
 	
-	itemsDroppedMagic = 64.346
+	itemsDroppedMagic := 64.346 * zana
+	If(ambush){
+		itemsDroppedMagic := 64.346 * 1.5
+	}
 	itemsDroppedRare = 20.395
-	itemsDroppedNormal = 39.41
+	itemsDroppedNormal := 39.41 * zana
+	If(ambush){
+		itemsDroppedNormal := 39.41 * 1.19
+	}
 	itemsDroppedBoss = 10.83
 
 	magicItems := itemsDroppedMagic * (1 + pack) * (1 + mag) * (1 + quant)
@@ -76,18 +199,19 @@ IfWinActive, Path of Exile ahk_class Direct3DWindowClass
 	mapDropSameLevel := mapDropSameLevel + (.2 - mapDropPlusTwo*2)
 	mapDropSameLevelOrBelow := (magicItems + rareItems + normalItems + bossItems) * mapDropChance
 	mapDropSameLevelOrBelow := mapDropSameLevelOrBelow + (.2  - mapDropPlusTwo*2)
-	totalMapdrops := (magicItems + bossItems + normalItems + rareItems) * mapDropChance
-	totalMapDrops := totalMapdrops + .2
+	totalMapDrops := (magicItems + bossItems + normalItems + rareItems) * mapDropChance
+	totalMapDrops := totalMapDrops + .2
 	breakEvenValue := mapDropPlusTwo + mapDropPlusOne + mapDropSameLevel
 	advanceValue := mapDropPlusTwo + mapDropPlusOne
 
-	textToShow := "Map Return Chances`rTotal Map Drops: " . Round(totalMapdrops,2) . " `r" . "+2: " . Round(mapDropPlusTwo,2) . " `r" . "+1: " . Round(mapDropPlusOne,2) . "`r+0: " . Round(mapDropSameLevel,2) . "`rBreak Even: " . Round(breakEvenValue,2) . "`radvanceValue: " . Round(advanceValue,2)
+	textToShow := "Map Return Chances`rTotal Map Drops: " . Round(totalMapDrops,2) . " `r" . "+2: " . Round(mapDropPlusTwo,2) . " `r" . "+1: " . Round(mapDropPlusOne,2) . "`r+0: " . Round(mapDropSameLevel,2) . "`rBreak Even: " . Round(breakEvenValue,2) . "`rAdvance Value: " . Round(advanceValue,2) . "`rZanaMod: " . zanaMod . "`rVaal Fragments: " . fragments
 	
 	FunctionShowToolTipPriceInfo(textToShow)
 
 	;FunctionShowToolTipPriceInfo()
+
 }
-return
+
 
 FunctionShowToolTipPriceInfo(responsecontent)
 {
@@ -101,6 +225,8 @@ FunctionShowToolTipPriceInfo(responsecontent)
     SetTimer, SubWatchCursorPrice, 100     
 
 }
+
+
 
 SubWatchCursorPrice:
   MouseGetPos, CurrX, CurrY

@@ -72,6 +72,28 @@ maps.push({
 
 var packsize = [7,8,14,4,7,9,9,7,4,9,13,10,8,14,5,6,10,6,6,8,7,12,10,11,10,5,7,9,14,8,12,10,10,5,11,9,11,12,8,7,7,10,5,10,5,11,10,8,7,10,6,3,9,10,10,3,11,10,4,11,13,8,7,10,10,11,10];
 
+var chestDrops1 = [4,2,2,2,4,2,2,2,2,2,1,2,1,1,3,1,2]
+var chestDrops2 = [1,2,1,21]
+var chestDrops3 = [25,16]
+var chestDrops4 = [57]
+var chestDrops5 = [24]
+var chestDrops6 = [19]
+var chestDrops7 = [21]
+var chestDrops8 = [18]
+var chestDrops9 = [22];
+
+var chestDrops = [chestDrops1,chestDrops2,chestDrops3,chestDrops4,chestDrops5,chestDrops6,chestDrops7,chestDrops8,chestDrops9];
+
+var totalChestDrops = 0;
+for(var i = 0; i < chestDrops.length;i++){
+	for(var z = 0; z < chestDrops[i].length;z++){
+		totalChestDrops += chestDrops[i][z]
+	}
+}
+totalChestDrops = totalChestDrops/chestDrops.length;
+console.log('totalChestDrops ' , totalChestDrops);
+
+
 
 var averagePacksize = 0;
 for(var i = 0; i < packsize.length;i++){
@@ -95,6 +117,8 @@ var averageRare = totalMaps.rare/maps.length;
 var averageBox = totalMaps.strongbox/maps.length;
 var averageBoss = totalMaps.boss/maps.length;
 var averageNormalWithBox = averageNormal + averageBox*3;
+var averageNormalWithDomi = averageNormalWithBox + (3*5);
+var averageNormalWithAmbush = averageNormalWithBox + (3*4);
 
 console.log("averageNormal: ", averageNormal);
 console.log("averageMagic: ", averageMagic);
@@ -102,6 +126,8 @@ console.log("averageRare: ", averageRare);
 console.log("averageBox: ", averageBox);
 console.log("averageBoss: ", averageBoss);
 console.log("averageNormalWithBox: ", averageNormalWithBox);
+console.log("averageNormalWithDomi: ", averageNormalWithDomi);
+console.log("averageNormalWithAmbush: ", averageNormalWithAmbush);
 
 var itemsDroppedMagic = averageMagic * dropAverageMagic * averagePacksize;
 console.log("itemsDroppedMagic: ", itemsDroppedMagic);
@@ -109,13 +135,16 @@ console.log("itemsDroppedMagic: ", itemsDroppedMagic);
 var itemsDroppedRare = averageRare * dropAverageRare;
 console.log("itemsDroppedRare: ", itemsDroppedRare);
 
-var itemsDroppedNormal = averageNormalWithBox * dropAverageNormal * averagePacksize;
+var itemsDroppedNormal = (averageNormalWithBox * dropAverageNormal * averagePacksize) + totalChestDrops;
 console.log("itemsDroppedNormal: ", itemsDroppedNormal);
 
 var totalItemsDropped = itemsDroppedMagic + itemsDroppedRare + itemsDroppedNormal + averageBoss;
 console.log("totalItemsDropped: ", totalItemsDropped);
 
-var doubleBossIncrease = averageBoss/totalItemsDropped;
+var domIncrease = averageNormalWithDomi/averageNormalWithBox;
+console.log('domIncrease ' , domIncrease);
+var ambushIncrease = averageNormalWithAmbush/averageNormalWithBox;
+console.log('ambushIncrease ' , ambushIncrease);
 
 var increasedPacksize = .3;
 var increasedQuantity = .8;
@@ -173,9 +202,8 @@ Item Level: 79
 Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.
 
 Corrupted
-
+Map Estimator
 
 */
 
-Map Estimator
 
