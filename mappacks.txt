@@ -1,50 +1,181 @@
-Underground River:
-magic: 6
-normal: 36
-rare: 9
-strongbox: 2
+var dropData = ["n",12,1,"n",8,1,"n",8,1,"n",7,2,"n",6,0,"m",5,4,"m",14,11,"m",7,7,"n",7,1,"r",1,3,"n",6,0,"m",10,11,"m",7,6,"n",9,2,"r",1,3,"m",13,9,"m",6,7,"n",4,0,"r",1,3,"m",9,12,"n",12,0,"r",1,2,"m",12,9,"r",1,2,"n",9,1,"r",1,2,"n",5,0,"n",5,1,"r",1,2,"n",6,0,"m",12,11,"r",1,3,"m",10,13,"n",10,1,"r",1,2,"n",8,0,"m",7,0,"r",1,2,"n",3,0,"n",7,1,"n",7,0,"r",1,2,"m",6,8,"n",4,1,"n",4,1,"n",10,0,"r",1,1,"n",4,0,"n",7,1,"n",6,2,"m",10,11,"n",3,0,"r",1,2,"n",7,0,"m",6,5,"n",10,2,"n",7,1,"r",1,2,"r",1,2,"m",12,11,"m",11,6,"n",3,0,"n",6,0,"n",8,1,"n",5,0,"n",7,1,"n",18,4,"n",5,1,"m",6,7,"n",7,0,"n",11,1,"r",1,3,"r",1,2,"n",10,1,"n",4,0,"m",8,8,"n",8,0,"r",1,2,"r",1,3,"n",11,2,"r",1,2,"m",3,3,"n",9,0,"n",7,0,"n",4,1,"r",1,2,"r",1,2,"n",14,2,"n",10,0,"n",11,1,"n",4,0,"r",1,2,"n",9,1,"r",1,2,"r",1,2,"r",1,2,"m",8,8,"n",10,2,"n",7,1,"m",13,13,"m",12,12,"n",6,2,"n",5,2,"n",10,0,"r",1,2];
 
-Terrace:
-normal: 50
-magic: 9
-rare: 6
-strongbox: 0
+var rare = {count: 0, drops: 0};
+var magic = {count: 0, drops: 0};
+var normal = {count: 0, drops: 0};
+var drops = {}
+drops["n"] = normal;
+drops["m"] = magic;
+drops["r"] = rare;
+for(var i = 0; i < dropData.length; i+=3){
+	var addTo = null;
+	drops[dropData[i]].count += dropData[i+1];
+	drops[dropData[i]].drops += dropData[i+2];
+}
 
-Tunnel:
-normal: 39
-magic: 8
-rare: 8
-strongbox: 1
+var dropAverageRare = rare.drops/rare.count;
+var dropAverageMagic = magic.drops/magic.count;
+var dropAverageNormal = normal.drops/normal.count;
+console.log("dropAverageNormal: ", dropAverageNormal);
+console.log("dropAverageMagic: ", dropAverageMagic);
+console.log("dropAverageRare: ", dropAverageRare);
 
-Crematorium:
-normal: 31
-magic: 7
-rare: 10
-strongbox: 1
+var maps = [];
+
+maps.push({
+	magic: 6,
+	normal: 36,
+	rare: 9,
+	strongbox: 2,
+	boss: 11
+});
+
+maps.push({
+	normal: 50,
+	magic: 9,
+	rare: 6,
+	strongbox: 0,
+	boss: 7
+});
+
+maps.push({
+	normal: 39,
+	magic: 8,
+	rare: 8,
+	strongbox: 1,
+	boss: 8
+});
+
+maps.push({
+	normal: 31,
+	magic: 7,
+	rare: 10,
+	strongbox: 1,
+	boss: 11
+});
+
+maps.push({
+	normal: 31,
+	magic: 7,
+	rare: 10,
+	strongbox: 1,
+	boss: 13
+});
+
+maps.push({
+	normal: 55,
+	magic: 11,
+	rare: 13,
+	strongbox: 1,
+	boss: 28 - 13
+});
+
+var packsize = [7,8,14,4,7,9,9,7,4,9,13,10,8,14,5,6,10,6,6,8,7,12,10,11,10,5,7,9,14,8,12,10,10,5,11,9,11,12,8,7,7,10,5,10,5,11,10,8,7,10,6,3,9,10,10,3,11,10,4,11,13,8,7,10,10,11,10];
 
 
-var normal = 36 + 50 + 39 + 31
-var magic = 6 + 9 + 8 + 7
-var rare = 10 + 8 + 6 + 9
+var averagePacksize = 0;
+for(var i = 0; i < packsize.length;i++){
+	averagePacksize += packsize[i];
+}
+averagePacksize = averagePacksize/packsize.length;
+console.log("averagePacksize: ", averagePacksize);
 
-average amount of normal packs : 39 + strongboxes*3 = 42
-average magic packs: 7.5
-average rares: 8.26
+var totalMaps = {normal:0,magic:0,rare:0,strongbox:0, boss: 0};
+for(var i = 0; i < maps.length;i++){
+	totalMaps.normal += maps[i].normal;
+	totalMaps.magic += maps[i].magic;
+	totalMaps.rare += maps[i].rare;
+	totalMaps.boss += maps[i].boss;
+	totalMaps.strongbox += maps[i].strongbox;
+}
 
-rares * rare mod = 2.5 rare mobs
-magic * magic mod = 2 magic packs
+var averageNormal = totalMaps.normal/maps.length;
+var averageMagic = totalMaps.magic/maps.length;
+var averageRare = totalMaps.rare/maps.length;
+var averageBox = totalMaps.strongbox/maps.length;
+var averageBoss = totalMaps.boss/maps.length;
+var averageNormalWithBox = averageNormal + averageBox*3;
 
-items dropped from a map:
-42 * 0.104 * 13 = 57
-7.5 * 0.92 * 13 = 89
-8.26 * 2.18 = 18
-total = 57 + 89 + 18 = 164
+console.log("averageNormal: ", averageNormal);
+console.log("averageMagic: ", averageMagic);
+console.log("averageRare: ", averageRare);
+console.log("averageBox: ", averageBox);
+console.log("averageBoss: ", averageBoss);
+console.log("averageNormalWithBox: ", averageNormalWithBox);
 
-rare mod items = 2.5 * 2.18 = 5.45 = 3.323% more items or 0.1% per %
-blue mod items = 2 * 13 * 0.92 = 23.92 = 14% more items or 0.45% per %
+var itemsDroppedMagic = averageMagic * dropAverageMagic * averagePacksize;
+console.log("itemsDroppedMagic: ", itemsDroppedMagic);
 
-chance for a drop to be a map: 1.524%
-chance for a rare to drop a map: 3.362%
-chance for a blue to drop a map: 1.402%
-chance for a normal to drop a map: 0.158%
+var itemsDroppedRare = averageRare * dropAverageRare;
+console.log("itemsDroppedRare: ", itemsDroppedRare);
+
+var itemsDroppedNormal = averageNormalWithBox * dropAverageNormal * averagePacksize;
+console.log("itemsDroppedNormal: ", itemsDroppedNormal);
+
+var totalItemsDropped = itemsDroppedMagic + itemsDroppedRare + itemsDroppedNormal + averageBoss;
+console.log("totalItemsDropped: ", totalItemsDropped);
+
+var doubleBossIncrease = averageBoss/totalItemsDropped;
+
+var increasedPacksize = .3;
+var increasedQuantity = .8;
+
+var tier = 5;
+var moreMagicMobs = .3;
+var moreRareMobs = .3;
+
+var magicModIncrease = (averageMagic * averagePacksize * dropAverageMagic * moreMagicMobs) / totalItemsDropped;
+console.log("magicModIncrease: ", magicModIncrease);
+
+var rareModIncrease = (averageRare * dropAverageRare * moreRareMobs) / totalItemsDropped;
+console.log("rareModIncrease: ", rareModIncrease);
+
+var mapDropRate = 1.55; // 1.75 - the 20% chance to drop from boss
+var isDoubleBoss = 2;
+
+var mapDropChance = mapDropRate/totalItemsDropped;
+console.log('mapDropChance: ' , mapDropChance);
+
+// Actual Map Drops for specific maps past this point
+
+var magicItems = itemsDroppedMagic * (1 + moreMagicMobs) * (1 + increasedPacksize) * (1 + increasedQuantity);
+var rareItems = itemsDroppedRare * (1 + moreRareMobs) * (1 + increasedQuantity);
+var normalItems = itemsDroppedNormal * (1 + increasedPacksize) * (1 + increasedQuantity);
+var bossItems = averageBoss * isDoubleBoss * (1 + increasedQuantity);
+
+var mapDropPlusTwo = .2 * (1/(tier+2) );
+console.log('mapDropPlusTwo ' , mapDropPlusTwo);
+var mapDropPlusOne = (magicItems + rareItems + bossItems ) * mapDropChance * (1/(tier + 1));
+mapDropPlusOne += mapDropPlusTwo;
+console.log('mapDropPlusOne ' , mapDropPlusOne);
+var mapDropSameLevel = (magicItems + rareItems + normalItems + bossItems) * mapDropChance * (1/tier);
+console.log('mapDropSameLevel ' , mapDropSameLevel);
+var mapDropSameLevelOrBelow = (magicItems + rareItems + normalItems + bossItems) * mapDropChance;
+mapDropSameLevelOrBelow += .2 - mapDropPlusTwo*2;
+console.log('mapDropSameLevelOrBelow ' , mapDropSameLevelOrBelow);
+
+var breakEvenValue = mapDropPlusTwo + mapDropPlusOne + mapDropSameLevel;
+console.log('breakEvenValue ' , breakEvenValue);
+
+var advanceValue = mapDropPlusTwo + mapDropPlusOne;
+console.log('advanceValue ' , advanceValue);
+
+/*
+
+Necropolis Map
+
+Map Tier: 10 Item Quantity: +127% (augmented) Item Rarity: +64% (augmented) Monster Pack Size: +42% (augmented)
+
+Item Level: 79
+
+25% more Rare Monsters Players are cursed with Elemental Weakness Players have no Life or Mana Regeneration -12% maximum Player Resistances 20% more Monster Life +60% Monster Cold Resistance Monsters cannot be Stunned Monsters gain 2 Frenzy Charges every 20 seconds Monsters' skills Chain 2 additional times Rare Monsters each have a Nemesis Mod
+
+Travel to this Map by using it in the Eternal Laboratory or a personal Map Device. Maps can only be used once.
+
+Corrupted
+
+
+*/
+
+Map Estimator
 
