@@ -7,10 +7,10 @@
 ; Ctrl + H = no zana, 1 fragment
 ; Ctrl + J = no zana, 2 fragments
 ; Ctrl + k = no zana, 3 fragments
-; Ctrl + Shift + G = Domination, 0 fragments
-; Ctrl + Shift + H = Domination, 1 fragments
-; Ctrl + Shift + J = Domination, 2 fragments
-; Ctrl + Shift + K = Domination, 3 fragments
+; Ctrl + Shift + G = Onslaught/Anarchy/Torment/Warbands/Beyond, 0 fragments
+; Ctrl + Shift + H = Onslaught/Anarchy/Torment/Warbands/Beyond, 1 fragments
+; Ctrl + Shift + J = Onslaught/Anarchy/Torment/Warbands/Beyond, 2 fragments
+; Ctrl + Shift + K = Onslaught/Anarchy/Torment/Warbands/Beyond, 3 fragments
 ; Ctrl + Alt + G = Ambush, 0 fragments
 ; Ctrl + Alt + H = Ambush, 1 fragments
 ; Ctrl + Alt + J = Ambush, 2 fragments
@@ -107,11 +107,14 @@ return
 
 
 FunctionCalcMapDrops(fragments, domi, ambush){
+
+	quant := 0
 	zana := 1
 	zanaMod := "None"
 	If(domi){
-		zana := 1.346153
-		zanaMod := "Domination"
+		zana := 1
+		zanaMod := "Onslaught/Anarchy/Torment/Warbands/Beyond"
+		quant := 0.2
 	}
 
 	If(ambush){
@@ -125,7 +128,7 @@ FunctionCalcMapDrops(fragments, domi, ambush){
 	StringReplace RawItemData, ClipBoardData, `r, , A
 
 	RegExMatch(RawItemData, "(Quantity:)\s\+([0-9]*)", SubPat)
-	quant := SubPat2/100
+	quant := quant + (SubPat2/100)
 	If(!quant){
 		quant = 0
 	}
@@ -171,7 +174,7 @@ FunctionCalcMapDrops(fragments, domi, ambush){
 	;todo add zana mods
 	;todo add vaal fragments
 
-	mapDropChance = 0.009445
+	mapDropChance = 0.013424
 	magicModIncrease = 0.1430/30
 	rareModIncrease = 0.04532/30
 
@@ -204,7 +207,7 @@ FunctionCalcMapDrops(fragments, domi, ambush){
 	breakEvenValue := mapDropPlusTwo + mapDropPlusOne + mapDropSameLevel
 	advanceValue := mapDropPlusTwo + mapDropPlusOne
 
-	textToShow := "Map Return Chances`rTotal Map Drops: " . Round(totalMapDrops,2) . " `r" . "+2: " . Round(mapDropPlusTwo,2) . " `r" . "+1: " . Round(mapDropPlusOne,2) . "`r+0: " . Round(mapDropSameLevel,2) . "`rBreak Even: " . Round(breakEvenValue,2) . "`rAdvance Value: " . Round(advanceValue,2) . "`rZanaMod: " . zanaMod . "`rVaal Fragments: " . fragments
+	textToShow := "Map Return Chances" . "`rMap Score: " . Round(breakEvenValue,2) . "`rTotal Map Drops: " . Round(totalMapDrops,2) . " `r" . "+2: " . Round(mapDropPlusTwo,2) . " `r" . "+1: " . Round(mapDropPlusOne,2) . "`r+0: " . Round(mapDropSameLevel,2)  . "`rAdvance Value: " . Round(advanceValue,2) . "`rZanaMod: " . zanaMod . "`rVaal Fragments: " . fragments
 	
 	FunctionShowToolTipPriceInfo(textToShow)
 
