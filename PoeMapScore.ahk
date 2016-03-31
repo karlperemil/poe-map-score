@@ -20,90 +20,24 @@ MouseMoveThreshold := 40
 CoordMode, Mouse, Screen
 CoordMode, ToolTip, Screen
 
+#IfWinActive Path of Exile ahk_class Direct3DWindowClass
 
-^g::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass
-{
-	FunctionCalcMapDrops(0,false,false)
-}
-return
 
-^h::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(1,false,false)
-}
-return
+^g::FunctionCalcMapDrops(0,false,false)
+^h::FunctionCalcMapDrops(1,false,false)
+^j::FunctionCalcMapDrops(2,false,false)
+^k::FunctionCalcMapDrops(3,false,false)
 
-^j::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(2,false,false)
-}
-return
+^+g::FunctionCalcMapDrops(0,true,false)
+^+h::FunctionCalcMapDrops(1,true,false)
+^+j::FunctionCalcMapDrops(2,true,false)
+^+k::FunctionCalcMapDrops(3,true,false)
 
-^k::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(3,false,false)
-}
-return
+^!g::FunctionCalcMapDrops(0,false,true)
+^!h::FunctionCalcMapDrops(1,false,true)
+^!j::FunctionCalcMapDrops(2,false,true)
+^!k::FunctionCalcMapDrops(3,false,true)
 
-^+g::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(0,true,false)
-}
-return
-
-^+h::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(1,true,false)
-}
-return
-
-^+j::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(2,true,false)
-}
-return
-
-^+k::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(3,true,false)
-}
-return
-
-^!g::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(0,false,true)
-}
-return
-
-^!h::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(1,false,true)
-}
-return
-
-^!j::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(2,false,true)
-}
-return
-
-^!k::
-IfWinActive, Path of Exile ahk_class Direct3DWindowClass 
-{
-	FunctionCalcMapDrops(3,false,true)
-}
-return
 
 
 FunctionCalcMapDrops(fragments, domi, ambush){
